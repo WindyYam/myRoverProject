@@ -7,7 +7,7 @@ The init_ardupilot function processes everything we need for an in - air restart
 *****************************************************************************/
 
 #include "Rover.h"
-
+#include "AP_HAL_AVR/utility/pins_arduino_mega.h"
 #if CLI_ENABLED == ENABLED
 
 // This is the help function
@@ -220,6 +220,15 @@ void Rover::init_ardupilot()
 	// set the correct flight mode
 	// ---------------------------
 	reset_control_switch();
+	
+	// init A0 A1 A2 A3
+	AP_HAL_AVR_APM2.gpio->pinMode(A0, HAL_GPIO_OUTPUT);
+	AP_HAL_AVR_APM2.gpio->pinMode(A1, HAL_GPIO_OUTPUT);
+	AP_HAL_AVR_APM2.gpio->pinMode(A2, HAL_GPIO_OUTPUT);
+	AP_HAL_AVR_APM2.gpio->pinMode(A3, HAL_GPIO_OUTPUT);
+	//reinit timer 1
+	TCCR5A = 1<<WGM50;
+	TCCR5B = (1<<CS51) | (1<<CS50);
 }
 
 //********************************************************************************
