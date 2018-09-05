@@ -45,7 +45,8 @@ Rover rover;
   time they are expected to take (in microseconds)
 */
 const AP_Scheduler::Task Rover::scheduler_tasks[] PROGMEM = {
-    { SCHED_TASK(read_radio),             1,   1000 },
+	//YAM: some of the tasks are not needed in our project
+    //{ SCHED_TASK(read_radio),             1,   1000 },
     { SCHED_TASK(ahrs_update),            1,   6400 },
     { SCHED_TASK(read_sonars),            1,   2000 },
     { SCHED_TASK(update_current_mode),    1,   1500 },

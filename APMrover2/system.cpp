@@ -215,20 +215,25 @@ void Rover::init_ardupilot()
 	startup_ground();
     Log_Write_Startup(TYPE_GROUNDSTART_MSG);
 
-    set_mode((enum mode)g.initial_mode.get());
-
+    //set_mode((enum mode)g.initial_mode.get());
+	//YAM: set mode to GUIDED
+	set_mode(GUIDED);
+	
 	// set the correct flight mode
 	// ---------------------------
 	reset_control_switch();
 	
 	// init A0 A1 A2 A3
-	AP_HAL_AVR_APM2.gpio->pinMode(A0, HAL_GPIO_OUTPUT);
-	AP_HAL_AVR_APM2.gpio->pinMode(A1, HAL_GPIO_OUTPUT);
-	AP_HAL_AVR_APM2.gpio->pinMode(A2, HAL_GPIO_OUTPUT);
-	AP_HAL_AVR_APM2.gpio->pinMode(A3, HAL_GPIO_OUTPUT);
+	hal.gpio->pinMode(A0, HAL_GPIO_OUTPUT);
+	hal.gpio->pinMode(A1, HAL_GPIO_OUTPUT);
+	hal.gpio->pinMode(A2, HAL_GPIO_OUTPUT);
+	hal.gpio->pinMode(A3, HAL_GPIO_OUTPUT);
 	//reinit timer 1
-	TCCR5A = 1<<WGM50;
-	TCCR5B = (1<<CS51) | (1<<CS50);
+	TCCR1A = 1<<WGM10;
+	//TCCR1B = (1<<CS11) | (1<<CS10);
+	TCCR1B = (TCCR1B & 0b11111000) | 0x02;  //pwm freq 3921HZ for timer1
+	TCCR1A |= (1<<COM1B1); // CH_1 : OC1B
+    TCCR1A |= (1<<COM1A1); // CH_2 : OC1A
 }
 
 //********************************************************************************

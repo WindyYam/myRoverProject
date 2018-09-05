@@ -7,8 +7,11 @@
  */
 void Rover::set_control_channels(void)
 {
-    channel_steer    = RC_Channel::rc_channel(rcmap.roll()-1);
-    channel_throttle = RC_Channel::rc_channel(rcmap.throttle()-1);
+    //channel_steer    = RC_Channel::rc_channel(rcmap.roll()-1);
+    //channel_throttle = RC_Channel::rc_channel(rcmap.throttle()-1);
+	// Yam: change this two to CH_1 and CH_2
+	channel_steer = RC_Channel::rc_channel(CH_1);
+	channel_throttle = RC_Channel::rc_channel(CH_2);
     channel_learn    = RC_Channel::rc_channel(g.learn_channel-1);
 
 	// set rc channel ranges
@@ -33,7 +36,7 @@ void Rover::init_rc_in()
 void Rover::init_rc_out()
 {
     RC_Channel::rc_channel(CH_1)->enable_out();
-    RC_Channel::rc_channel(CH_3)->enable_out();
+    RC_Channel::rc_channel(CH_2)->enable_out();
     RC_Channel::output_trim_all();    
 
     // setup PWM values to send if the FMU firmware dies
