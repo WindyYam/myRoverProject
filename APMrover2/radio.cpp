@@ -35,10 +35,18 @@ void Rover::init_rc_in()
 
 void Rover::init_rc_out()
 {
-    RC_Channel::rc_channel(CH_1)->enable_out();
-    RC_Channel::rc_channel(CH_2)->enable_out();
+    channel_steer->enable_out();
+    channel_throttle->enable_out();
     RC_Channel::output_trim_all();    
-
+	//Yam: A0 A1 A2 A3 is in PORTF
+	//TODO: make all these more reasonable(use functions)
+	PORTF |= 1<<0; //A0
+	PORTF &= ~(1<<1); //A1
+	PORTF |= 1<<2; //A2
+	PORTF &= ~(1<<3); //A3
+	//stop
+	channel_steer->output(0);
+	channel_throttle->output(0);
     // setup PWM values to send if the FMU firmware dies
     RC_Channel::setup_failsafe_trim_all();  
 }

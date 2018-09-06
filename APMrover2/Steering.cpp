@@ -283,7 +283,8 @@ void Rover::set_servos(void)
     // record last throttle before we apply skid steering
     last_throttle = channel_throttle->radio_out;
 
-    if (g.skid_steer_out) {
+	//Yam: it's skid steer for sure
+    if (true) {
         // convert the two radio_out values to skid steering values
         /*
           mixing rule:
@@ -296,18 +297,40 @@ void Rover::set_servos(void)
         float throttle_scaled = channel_throttle->norm_output();
         float motor1 = throttle_scaled + 0.5f*steering_scaled;
         float motor2 = throttle_scaled - 0.5f*steering_scaled;
-        channel_steer->servo_out = 4500*motor1;
+		
+		//Yam: here output directly
+		if(motor1 >= 0){
+			PORTF |= 1<<0; //A0
+			PORTF &= ~(1<<1); //A1
+			channel_steer->output((uint8_t)motor1*255);
+		}else{
+			PORTF &= ~(1<<0); //A0
+			PORTF |= 1<<1; //A1
+			channel_steer->output((uint8_t)motor1*-255);
+		}
+		
+		if(motor2 >= 0){
+			PORTF |= 1<<2; //A2
+			PORTF &= ~(1<<3); //A3
+			channel_throttle->output((uint8_t)motor2*255);
+		}else{
+			PORTF &= ~(1<<2); //A2
+			PORTF |= 1<<3; //A3
+			channel_throttle->output((uint8_t)motor2*-255);
+		}
+		
+        /*channel_steer->servo_out = 4500*motor1;
         channel_throttle->servo_out = 100*motor2;
         channel_steer->calc_pwm();
-        channel_throttle->calc_pwm();
+        channel_throttle->calc_pwm();*/
     }
 
 
 #if HIL_MODE == HIL_MODE_DISABLED || HIL_SERVOS
 	// send values to the PWM timers for output
 	// ----------------------------------------
-    channel_steer->output(); 
-    channel_throttle->output();
+    /*channel_steer->output(); 
+    channel_throttle->output();*/
     RC_Channel_aux::output_ch_all();
 #endif
 }

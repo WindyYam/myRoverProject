@@ -126,6 +126,7 @@ public:
     int16_t                                         range_to_pwm();
 
     void                                            output() const;
+	void                                            output(uint8_t val) const;
     void                                            output_trim() const;
     static void                                     output_trim_all();
     static void                                     setup_failsafe_trim_all();

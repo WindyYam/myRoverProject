@@ -449,6 +449,11 @@ void RC_Channel::output() const
     hal.rcout->write(_ch_out, radio_out);
 }
 
+void RC_Channel::output(uint8_t val) const
+{
+    hal.rcout->write(_ch_out, val);
+}
+
 void RC_Channel::output_trim() const
 {
     hal.rcout->write(_ch_out, radio_trim);
